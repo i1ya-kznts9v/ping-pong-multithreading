@@ -12,41 +12,32 @@ pthread_cond_t cond_t = PTHREAD_COND_INITIALIZER;
 int steps = 30;
 int step = 0;
 
-void *ping(void *arg) {
+void ping_pong(int side) {
     while (step < steps) {
         pthread_mutex_lock(&lock_t);
 
         usleep(150000);
-        while (state == PING) {
+        while (state == side) {
             pthread_cond_wait(&cond_t, &lock_t);
         }
-        printf("Ping!\n");
+        printf("%s!\n", side == PING ? "PING" : "PONG");
 
-        step++;
-        state = PING;
+        step = step + state;
+        state = 1 - state;
         pthread_cond_signal(&cond_t);
         pthread_mutex_unlock(&lock_t);
     }
+}
+
+void *ping(void *arg) {
+    ping_pong(PING);
 }
 
 void *pong(void *arg) {
-    while (step < steps) {
-        pthread_mutex_lock(&lock_t);
-
-        usleep(150000);
-        while (state == PONG) {
-            pthread_cond_wait(&cond_t, &lock_t);
-        }
-        printf("Pong!\n");
-
-        step++;
-        state = PONG;
-        pthread_cond_signal(&cond_t);
-        pthread_mutex_unlock(&lock_t);
-    }
+    ping_pong(PONG);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     pthread_t t_ping, t_pong;
 
     pthread_create(&t_ping, NULL, ping, NULL);
