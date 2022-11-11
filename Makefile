@@ -1,9 +1,9 @@
 CFLAGS = -g -pthread
 
-all: clean pingpong
+all: clean ping_pong
 
-pingpong: pingpong.c
-	gcc $(CFLAGS) -o pingpong pingpong.c
+ping_pong: ping_pong.c
+	gcc $(CFLAGS) -o ping_pong ping_pong.c
 
 clean:
-	rm -f pingpong
+	rm -f ping_pong

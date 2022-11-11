@@ -20,7 +20,7 @@ void ping_pong(int side) {
         while (state == side) {
             pthread_cond_wait(&cond_t, &lock_t);
         }
-        printf("%s!\n", side == PING ? "PING" : "PONG");
+        printf("%s!\n", side == PING ? "Ping" : "Pong");
 
         step = step + state;
         state = 1 - state;
