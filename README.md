@@ -1,1 +1,1 @@
-# ping-pong-multithreading
+# pingo-pongo-multithreading
